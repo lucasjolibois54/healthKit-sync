@@ -1,0 +1,36 @@
+{
+  "name": "healthkit-sync",
+  "version": "1.0.0",
+  "description": "A custom fork of react-native-health with support for reading, writing, and deleting Apple HealthKit data.",
+  "main": "index.js",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lucasjolibois54/healthKit-sync.git"
+  },
+  "keywords": [
+    "healthkit",
+    "apple-health",
+    "react-native",
+    "ios",
+    "native-modules",
+    "health",
+    "sync",
+    "healthkit-sync"
+  ],
+  "bugs": {
+    "url": "https://github.com/lucasjolibois54/healthKit-sync/issues"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "react-native": ">=0.67.3"
+  },
+  "peerDependencies": {
+    "react-native": ">=0.67.3"
+  },
+  "dependencies": {
+    "@expo/config-plugins": "^7.2.2"
+  }
+}
