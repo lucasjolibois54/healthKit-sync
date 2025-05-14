@@ -6,7 +6,7 @@
 #
 
 Pod::Spec.new do |s|
-  s.name             = 'HealthKitSync'
+  s.name             = 'healthkit-sync'
   s.version          = '1.0.0'
   s.summary          = 'A React Native module for syncing, writing, and deleting Apple HealthKit data'
 
