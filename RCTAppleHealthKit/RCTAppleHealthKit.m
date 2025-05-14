@@ -859,4 +859,49 @@ RCT_EXPORT_METHOD(getClinicalRecords:(NSDictionary *)input callback:(RCTResponse
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+
+//  Delete meal by id functionality
+RCT_EXPORT_METHOD(deleteMealById:(NSString *)mealId callback:(RCTResponseSenderBlock)callback)
+{
+    [self _initializeHealthStore];
+
+    if (!mealId) {
+        callback(@[@"Missing mealId", [NSNull null]]);
+        return;
+    }
+
+    NSArray *identifiers = @[
+        HKQuantityTypeIdentifierDietaryEnergyConsumed,
+        HKQuantityTypeIdentifierDietaryProtein,
+        HKQuantityTypeIdentifierDietaryCarbohydrates,
+        HKQuantityTypeIdentifierDietaryFatTotal
+    ];
+
+    dispatch_group_t group = dispatch_group_create();
+    __block BOOL allSucceeded = YES;
+
+    for (NSString *idStr in identifiers) {
+        HKQuantityType *type = [HKObjectType quantityTypeForIdentifier:idStr];
+        NSPredicate *predicate = [HKQuery predicateForObjectsWithMetadataKey:@"mealId" allowedValues:@[mealId]];
+
+        dispatch_group_enter(group);
+
+        [self.healthStore deleteObjectsOfType:type predicate:predicate withCompletion:^(BOOL success, NSUInteger deletedObjectCount, NSError * _Nullable error) {
+            if (!success || error) {
+                NSLog(@"❌ Failed to delete %@: %@", idStr, error.localizedDescription);
+                allSucceeded = NO;
+            }
+            dispatch_group_leave(group);
+        }];
+    }
+
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        if (allSucceeded) {
+            callback(@[[NSNull null], @(1)]);
+        } else {
+            callback(@[@"Failed to delete one or more nutrient samples", @(0)]);
+        }
+    });
+}
+
 @end
